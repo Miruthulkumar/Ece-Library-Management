@@ -7,6 +7,7 @@ const MyBooks = () => {
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [requestingReturnId, setRequestingReturnId] = useState(null);
 
   useEffect(() => {
     fetchMyIssues();
@@ -25,6 +26,26 @@ const MyBooks = () => {
     }
   };
 
+  const handleRequestReturn = async (issueId) => {
+    if (!window.confirm("Request to return this book? You'll need to bring it to the library for the librarian to process.")) {
+      return;
+    }
+
+    try {
+      setRequestingReturnId(issueId);
+      await api.put(`/issues/${issueId}/request-return`);
+      
+      // Refresh the issues list
+      await fetchMyIssues();
+      
+      alert("Return request submitted successfully! Please bring the book to the library.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to request return");
+    } finally {
+      setRequestingReturnId(null);
+    }
+  };
+
   const getStatusBadgeClass = (status) => {
     switch (status) {
       case "pending":
@@ -35,6 +56,8 @@ const MyBooks = () => {
         return "status-badge status-cancelled";
       case "returned":
         return "status-badge status-fulfilled";
+      case "return_requested":
+        return "status-badge status-pending";
       default:
         return "status-badge";
     }
@@ -56,8 +79,8 @@ const MyBooks = () => {
     return diffDays;
   };
 
-  const activeIssues = issues.filter((issue) => 
-    issue.status === "issued" || issue.status === "overdue" || issue.status === "pending"
+  const activeIssues = issues.filter((issue) =>
+    issue.status === "issued" || issue.status === "overdue" || issue.status === "pending" || issue.status === "return_requested"
   );
 
   const historyIssues = issues.filter((issue) => 
