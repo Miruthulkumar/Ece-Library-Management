@@ -1,0 +1,188 @@
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
+import Loader from "./components/common/Loader";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Books from "./pages/Books";
+import MyReservations from "./pages/MyReservations";
+import ManageBooks from "./pages/ManageBooks";
+import ManageUsers from "./pages/ManageUsers";
+import "./App.css";
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <Loader fullPage />;
+  }
+
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+// Public Route Component (redirect to home if authenticated)
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <Loader fullPage />;
+  }
+
+  return !isAuthenticated ? children : <Navigate to="/" />;
+};
+
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <div className="app">
+      {isAuthenticated && <Navbar />}
+
+      <main className="main-content">
+        <Routes>
+          {/* Public Routes */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Books Routes */}
+          <Route
+            path="/books"
+            element={
+              <ProtectedRoute>
+                <Books />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/my-books"
+            element={
+              <ProtectedRoute>
+                <div className="container" style={{ padding: "3rem" }}>
+                  <div className="card">
+                    <h2>My Books</h2>
+                    <p>
+                      View all your currently issued books and their due dates.
+                    </p>
+                  </div>
+                </div>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reservations"
+            element={
+              <ProtectedRoute>
+                <MyReservations />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-books"
+            element={
+              <ProtectedRoute>
+                <ManageBooks />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-users"
+            element={
+              <ProtectedRoute>
+                <ManageUsers />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <div className="container" style={{ padding: "3rem" }}>
+                  <div className="card">
+                    <h2>Analytics Dashboard</h2>
+                    <p>View library statistics, trends, and reports.</p>
+                  </div>
+                </div>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 Route */}
+          <Route
+            path="*"
+            element={
+              <div
+                className="container"
+                style={{ padding: "3rem", textAlign: "center" }}
+              >
+                <div className="empty-state">
+                  <div className="empty-state-icon">🔍</div>
+                  <h1 className="empty-state-title">Page Not Found</h1>
+                  <p>The page you're looking for doesn't exist.</p>
+                  <a
+                    href="/"
+                    className="btn btn-primary"
+                    style={{ marginTop: "1rem" }}
+                  >
+                    Go to Home
+                  </a>
+                </div>
+              </div>
+            }
+          />
+        </Routes>
+      </main>
+
+      {isAuthenticated && <Footer />}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;

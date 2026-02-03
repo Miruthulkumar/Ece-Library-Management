@@ -1,0 +1,120 @@
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "./Navbar.css";
+
+const Navbar = () => {
+  const { user, logout, isStudent, isFaculty, isLibrarian } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  return (
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo">
+          <div className="navbar-logo-icon">📚</div>
+          <div className="navbar-logo-text">
+            <div className="navbar-logo-title">MKCE ECE Library</div>
+            <div className="navbar-logo-subtitle">Management System</div>
+          </div>
+        </Link>
+
+        {user && (
+          <>
+            <button className="navbar-toggle" onClick={toggleMobileMenu}>
+              {mobileMenuOpen ? '✕' : '☰'}
+            </button>
+
+            <ul className={`navbar-links ${mobileMenuOpen ? 'active' : ''}`}>
+              <li className={`navbar-link ${isActive('/')}`}>
+                <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                  <span className="navbar-link-icon">🏠</span>
+                  <span>Dashboard</span>
+                </Link>
+              </li>
+
+              <li className={`navbar-link ${isActive('/books')}`}>
+                <Link to="/books" onClick={() => setMobileMenuOpen(false)}>
+                  <span className="navbar-link-icon">📚</span>
+                  <span>Books</span>
+                </Link>
+              </li>
+
+              {(isStudent || isFaculty) && (
+                <>
+                  <li className={`navbar-link ${isActive('/my-books')}`}>
+                    <Link to="/my-books" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">📖</span>
+                      <span>My Books</span>
+                    </Link>
+                  </li>
+                  <li className={`navbar-link ${isActive('/reservations')}`}>
+                    <Link to="/reservations" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">🔖</span>
+                      <span>Reservations</span>
+                    </Link>
+                  </li>
+                </>
+              )}
+
+              {isLibrarian && (
+                <>
+                  <li className={`navbar-link ${isActive('/manage-books')}`}>
+                    <Link to="/manage-books" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">⚙️</span>
+                      <span>Manage Books</span>
+                    </Link>
+                  </li>
+                  <li className={`navbar-link ${isActive('/manage-users')}`}>
+                    <Link to="/manage-users" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">👥</span>
+                      <span>Manage Users</span>
+                    </Link>
+                  </li>
+                  <li className={`navbar-link ${isActive('/analytics')}`}>
+                    <Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">📊</span>
+                      <span>Analytics</span>
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+
+            <div className="navbar-user">
+              <div className="navbar-user-info">
+                <div className="navbar-user-avatar">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <div className="navbar-user-details">
+                  <div className="navbar-user-name">{user?.name}</div>
+                  <div className="navbar-user-role">{user?.role}</div>
+                </div>
+              </div>
+              <button onClick={handleLogout} className="navbar-logout">
+                <span>🚪</span>
+                <span>Logout</span>
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
