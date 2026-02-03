@@ -16,23 +16,51 @@ const Register = () => {
     section: "",
   });
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    
+    // Special handling for email field validation
+    if (name === 'email') {
+      setFormData({
+        ...formData,
+        email: value,
+      });
+      
+      // Check if email contains @ and validate domain
+      if (value.includes('@')) {
+        if (!value.endsWith('@mkce.ac.in')) {
+          setEmailError('Please use your @mkce.ac.in email address');
+        } else {
+          setEmailError('');
+        }
+      } else {
+        setEmailError('');
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setEmailError("");
 
     // Validation
+    if (!formData.email.endsWith('@mkce.ac.in')) {
+      setEmailError('Please use your @mkce.ac.in email address');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -135,11 +163,29 @@ const Register = () => {
                   type="email"
                   name="email"
                   className="form-control"
-                  placeholder="your.email@ece.edu"
+                  placeholder="your.name@mkce.ac.in"
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  style={emailError ? { borderColor: '#ef4444' } : {}}
                 />
+                {emailError && (
+                  <div style={{
+                    marginTop: '0.5rem',
+                    padding: '0.5rem 0.75rem',
+                    background: '#fee2e2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '0.5rem',
+                    color: '#dc2626',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span>⚠️</span>
+                    <span>{emailError}</span>
+                  </div>
+                )}
               </div>
 
               <div className="form-group">

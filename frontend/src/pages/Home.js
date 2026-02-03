@@ -47,7 +47,7 @@ const Home = () => {
             {isStudent && "🎓 Student"}
           </div>
           <h1 className="dashboard-title">
-            Welcome, {user?.name?.split(' ')[0]}! 👋
+            Welcome, {user?.name?.split(" ")[0]}! 👋
           </h1>
           <p className="dashboard-subtitle">
             {isLibrarian && "Manage your library efficiently"}
@@ -65,7 +65,9 @@ const Home = () => {
                 <div className="stat-content">
                   <div className="stat-value">{stats.totalBooks}</div>
                   <div className="stat-label">Total Books</div>
-                  <div className="stat-trend">↑ {stats.totalAvailable} Available</div>
+                  <div className="stat-trend">
+                    ↑ {stats.totalAvailable} Available
+                  </div>
                 </div>
               </div>
 
@@ -83,7 +85,9 @@ const Home = () => {
                 <div className="stat-content">
                   <div className="stat-value">{stats.activeIssues}</div>
                   <div className="stat-label">Active Issues</div>
-                  <div className="stat-trend">⚡ {stats.pendingIssues} Pending</div>
+                  <div className="stat-trend">
+                    ⚡ {stats.pendingIssues} Pending
+                  </div>
                 </div>
               </div>
 
@@ -92,7 +96,9 @@ const Home = () => {
                 <div className="stat-content">
                   <div className="stat-value">{stats.overdueCount}</div>
                   <div className="stat-label">Overdue Books</div>
-                  <div className="stat-trend">₹{stats.totalPendingFines} Fines</div>
+                  <div className="stat-trend">
+                    ₹{stats.totalPendingFines} Fines
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,6 +106,12 @@ const Home = () => {
             <div className="quick-actions">
               <h2 className="section-title">⚡ Quick Actions</h2>
               <div className="actions-grid">
+                <Link to="/analytics" className="action-card">
+                  <span className="action-icon">📊</span>
+                  <h3 className="action-title">Analytics</h3>
+                  <p className="action-description">View insights</p>
+                </Link>
+
                 <Link to="/manage-books" className="action-card">
                   <span className="action-icon">📚</span>
                   <h3 className="action-title">Manage Books</h3>
@@ -123,6 +135,12 @@ const Home = () => {
                   <h3 className="action-title">Browse Books</h3>
                   <p className="action-description">View catalog</p>
                 </Link>
+
+                <Link to="/manage-issues" className="action-card">
+                  <span className="action-icon">📖</span>
+                  <h3 className="action-title">Manage Issues</h3>
+                  <p className="action-description">Track borrowing</p>
+                </Link>
               </div>
             </div>
           </>
@@ -136,9 +154,11 @@ const Home = () => {
                 <div className="stat-icon">📖</div>
                 <div className="stat-content">
                   <div className="stat-value">
-                    {recentIssues.filter((i) =>
-                      ["issued", "overdue"].includes(i.status)
-                    ).length}
+                    {
+                      recentIssues.filter((i) =>
+                        ["issued", "overdue"].includes(i.status),
+                      ).length
+                    }
                   </div>
                   <div className="stat-label">Books Issued</div>
                 </div>
@@ -202,7 +222,9 @@ const Home = () => {
                           Due: {formatDate(issue.dueDate)}
                         </div>
                       </div>
-                      <span className={`badge ${getStatusBadgeClass(issue.status)}`}>
+                      <span
+                        className={`badge ${getStatusBadgeClass(issue.status)}`}
+                      >
                         {issue.status}
                       </span>
                     </div>

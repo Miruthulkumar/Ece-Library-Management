@@ -19,6 +19,7 @@ import ManageBooks from "./pages/ManageBooks";
 import ManageUsers from "./pages/ManageUsers";
 import ManageReservations from "./pages/ManageReservations";
 import ManageIssues from "./pages/ManageIssues";
+import Analytics from "./pages/Analytics";
 import "./App.css";
 
 // Protected Route Component
@@ -148,12 +149,7 @@ function AppRoutes() {
             path="/analytics"
             element={
               <ProtectedRoute>
-                <div className="container" style={{ padding: "3rem" }}>
-                  <div className="card">
-                    <h2>Analytics Dashboard</h2>
-                    <p>View library statistics, trends, and reports.</p>
-                  </div>
-                </div>
+                <Analytics />
               </ProtectedRoute>
             }
           />

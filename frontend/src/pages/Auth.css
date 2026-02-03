@@ -396,13 +396,13 @@
 /* Role Selection Cards */
 .role-selection {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .role-card {
-  padding: 1rem;
+  padding: 1.5rem 1rem;
   background: #ffffff;
   border: 2px solid #e5e7eb;
   border-radius: 1rem;
