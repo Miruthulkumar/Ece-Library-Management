@@ -18,6 +18,7 @@ import MyBooks from "./pages/MyBooks";
 import ManageBooks from "./pages/ManageBooks";
 import ManageUsers from "./pages/ManageUsers";
 import ManageReservations from "./pages/ManageReservations";
+import ManageIssues from "./pages/ManageIssues";
 import "./App.css";
 
 // Protected Route Component
@@ -130,6 +131,15 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <ManageReservations />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-issues"
+            element={
+              <ProtectedRoute>
+                <ManageIssues />
               </ProtectedRoute>
             }
           />

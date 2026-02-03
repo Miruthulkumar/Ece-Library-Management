@@ -218,6 +218,25 @@ const MyBooks = () => {
                           Waiting for librarian approval to collect the book.
                         </div>
                       )}
+
+                      {issue.status === "return_requested" && (
+                        <div className="reservation-alert alert-info">
+                          <span className="alert-icon">📦</span>
+                          Return request submitted. Please bring the book to the library for the librarian to process.
+                        </div>
+                      )}
+
+                      {(issue.status === "issued" || issue.status === "overdue") && (
+                        <div className="reservation-actions">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => handleRequestReturn(issue._id)}
+                            disabled={requestingReturnId === issue._id}
+                          >
+                            {requestingReturnId === issue._id ? "Requesting..." : "Request Return"}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

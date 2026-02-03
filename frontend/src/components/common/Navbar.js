@@ -79,6 +79,18 @@ const Navbar = () => {
                       <span>Manage Books</span>
                     </Link>
                   </li>
+                  <li className={`navbar-link ${isActive('/manage-reservations')}`}>
+                    <Link to="/manage-reservations" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">📋</span>
+                      <span>Reservations</span>
+                    </Link>
+                  </li>
+                  <li className={`navbar-link ${isActive('/manage-issues')}`}>
+                    <Link to="/manage-issues" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="navbar-link-icon">📚</span>
+                      <span>Issues & Returns</span>
+                    </Link>
+                  </li>
                   <li className={`navbar-link ${isActive('/manage-users')}`}>
                     <Link to="/manage-users" onClick={() => setMobileMenuOpen(false)}>
                       <span className="navbar-link-icon">👥</span>
