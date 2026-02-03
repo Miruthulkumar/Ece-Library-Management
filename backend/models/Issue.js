@@ -24,8 +24,11 @@ const issueSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "issued", "returned", "overdue"],
+    enum: ["pending", "issued", "returned", "overdue", "return_requested"],
     default: "pending",
+  },
+  returnRequestedAt: {
+    type: Date,
   },
   remarks: {
     type: String,

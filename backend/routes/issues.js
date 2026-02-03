@@ -8,6 +8,7 @@ const {
   rejectIssue,
   returnBook,
   getOverdueBooks,
+  requestReturn,
 } = require("../controllers/issueController");
 const { protect } = require("../middleware/auth");
 const { authorize } = require("../middleware/roleCheck");
@@ -19,6 +20,7 @@ router.get("/overdue", protect, authorize("librarian"), getOverdueBooks);
 
 router.put("/:id/approve", protect, authorize("librarian"), approveIssue);
 router.put("/:id/reject", protect, authorize("librarian"), rejectIssue);
+router.put("/:id/request-return", protect, requestReturn);
 router.put("/:id/return", protect, authorize("librarian"), returnBook);
 
 module.exports = router;

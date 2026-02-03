@@ -47,79 +47,52 @@ const Home = () => {
             {isStudent && "🎓 Student"}
           </div>
           <h1 className="dashboard-title">
-            Welcome back, {user?.name?.split(' ')[0]}! 👋
+            Welcome, {user?.name?.split(' ')[0]}! 👋
           </h1>
           <p className="dashboard-subtitle">
-            {isLibrarian && "Manage your library efficiently with powerful tools"}
-            {isFaculty && "Explore our extensive collection of academic resources"}
-            {isStudent && "Continue your learning journey with us"}
+            {isLibrarian && "Manage your library efficiently"}
+            {isFaculty && "Explore our academic resources"}
+            {isStudent && "Continue your learning journey"}
           </p>
-          <div className="user-info">
-            <div className="user-avatar">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <div className="user-details">
-              <div className="user-name">{user?.name}</div>
-              <div className="user-role">
-                {user?.departmentId} • {user?.role}
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Librarian Dashboard */}
         {isLibrarian && stats && (
           <>
             <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-primary">📚</div>
-                </div>
+              <div className="stat-card stat-primary">
+                <div className="stat-icon">📚</div>
                 <div className="stat-content">
                   <div className="stat-value">{stats.totalBooks}</div>
                   <div className="stat-label">Total Books</div>
-                  <div className="stat-trend">
-                    ↑ {stats.totalAvailable} Available
-                  </div>
+                  <div className="stat-trend">↑ {stats.totalAvailable} Available</div>
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-success">👥</div>
-                </div>
+              <div className="stat-card stat-success">
+                <div className="stat-icon">👥</div>
                 <div className="stat-content">
                   <div className="stat-value">{stats.totalUsers}</div>
                   <div className="stat-label">Active Users</div>
-                  <div className="stat-trend">
-                    ↑ Growing Community
-                  </div>
+                  <div className="stat-trend">↑ Growing</div>
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-warning">📖</div>
-                </div>
+              <div className="stat-card stat-warning">
+                <div className="stat-icon">📖</div>
                 <div className="stat-content">
                   <div className="stat-value">{stats.activeIssues}</div>
                   <div className="stat-label">Active Issues</div>
-                  <div className="stat-trend">
-                    ⚡ {stats.pendingIssues} Pending
-                  </div>
+                  <div className="stat-trend">⚡ {stats.pendingIssues} Pending</div>
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-info">⏰</div>
-                </div>
+              <div className="stat-card stat-danger">
+                <div className="stat-icon">⏰</div>
                 <div className="stat-content">
                   <div className="stat-value">{stats.overdueCount}</div>
                   <div className="stat-label">Overdue Books</div>
-                  <div className="stat-trend">
-                    ₹{stats.totalPendingFines} Fines
-                  </div>
+                  <div className="stat-trend">₹{stats.totalPendingFines} Fines</div>
                 </div>
               </div>
             </div>
@@ -128,27 +101,27 @@ const Home = () => {
               <h2 className="section-title">⚡ Quick Actions</h2>
               <div className="actions-grid">
                 <Link to="/manage-books" className="action-card">
-                  <span className="action-icon">➕</span>
-                  <h3 className="action-title">Add Book</h3>
-                  <p className="action-description">Add new books to collection</p>
-                </Link>
-
-                <Link to="/manage-users" className="action-card">
-                  <span className="action-icon">✅</span>
-                  <h3 className="action-title">Approve Users</h3>
-                  <p className="action-description">Pending registrations</p>
+                  <span className="action-icon">📚</span>
+                  <h3 className="action-title">Manage Books</h3>
+                  <p className="action-description">Add or edit books</p>
                 </Link>
 
                 <Link to="/manage-users" className="action-card">
                   <span className="action-icon">👥</span>
                   <h3 className="action-title">Manage Users</h3>
-                  <p className="action-description">View all members</p>
+                  <p className="action-description">Approve members</p>
                 </Link>
 
-                <Link to="/analytics" className="action-card">
-                  <span className="action-icon">📊</span>
-                  <h3 className="action-title">Analytics</h3>
-                  <p className="action-description">View detailed reports</p>
+                <Link to="/manage-reservations" className="action-card">
+                  <span className="action-icon">📋</span>
+                  <h3 className="action-title">Reservations</h3>
+                  <p className="action-description">Approve requests</p>
+                </Link>
+
+                <Link to="/books" className="action-card">
+                  <span className="action-icon">🔍</span>
+                  <h3 className="action-title">Browse Books</h3>
+                  <p className="action-description">View catalog</p>
                 </Link>
               </div>
             </div>
@@ -159,10 +132,8 @@ const Home = () => {
         {(isStudent || isFaculty) && (
           <>
             <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-primary">📖</div>
-                </div>
+              <div className="stat-card stat-primary">
+                <div className="stat-icon">📖</div>
                 <div className="stat-content">
                   <div className="stat-value">
                     {recentIssues.filter((i) =>
@@ -173,10 +144,8 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-success">✅</div>
-                </div>
+              <div className="stat-card stat-success">
+                <div className="stat-icon">✅</div>
                 <div className="stat-content">
                   <div className="stat-value">
                     {recentIssues.filter((i) => i.status === "returned").length}
@@ -185,10 +154,8 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="stat-card">
-                <div className="stat-header">
-                  <div className="stat-icon stat-icon-info">🎯</div>
-                </div>
+              <div className="stat-card stat-info">
+                <div className="stat-icon">🎯</div>
                 <div className="stat-content">
                   <div className="stat-value">{isFaculty ? "5" : "3"}</div>
                   <div className="stat-label">Issue Limit</div>
@@ -202,7 +169,7 @@ const Home = () => {
                 <Link to="/books" className="action-card">
                   <span className="action-icon">🔍</span>
                   <h3 className="action-title">Browse Books</h3>
-                  <p className="action-description">Search our collection</p>
+                  <p className="action-description">Search collection</p>
                 </Link>
 
                 <Link to="/my-books" className="action-card">
@@ -216,80 +183,35 @@ const Home = () => {
                   <h3 className="action-title">Reservations</h3>
                   <p className="action-description">Manage queue</p>
                 </Link>
-
-                <Link to="/profile" className="action-card">
-                  <span className="action-icon">👤</span>
-                  <h3 className="action-title">My Profile</h3>
-                  <p className="action-description">Update details</p>
-                </Link>
               </div>
             </div>
 
             {/* Recent Activity */}
-            {recentIssues.length > 0 ? (
+            {recentIssues.length > 0 && (
               <div className="recent-activity">
                 <h2 className="section-title">📋 Recent Activity</h2>
-                {recentIssues.map((issue) => (
-                  <div key={issue._id} className="activity-item">
-                    <div className="activity-icon">📕</div>
-                    <div className="activity-content">
-                      <div className="activity-title">
-                        {issue.book?.title || "Book Title"}
+                <div className="activity-list">
+                  {recentIssues.map((issue) => (
+                    <div key={issue._id} className="activity-item">
+                      <div className="activity-icon">📕</div>
+                      <div className="activity-content">
+                        <div className="activity-title">
+                          {issue.book?.title || "Book Title"}
+                        </div>
+                        <div className="activity-time">
+                          Due: {formatDate(issue.dueDate)}
+                        </div>
                       </div>
-                      <div className="activity-time">
-                        Due: {formatDate(issue.dueDate)}
-                      </div>
+                      <span className={`badge ${getStatusBadgeClass(issue.status)}`}>
+                        {issue.status}
+                      </span>
                     </div>
-                    <span className={`badge ${getStatusBadgeClass(issue.status)}`}>
-                      {issue.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="empty-state">
-                <div className="empty-state-icon">📚</div>
-                <h3 className="empty-state-title">No Active Books</h3>
-                <p className="empty-state-description">
-                  Start exploring our collection and issue your first book!
-                </p>
-                <Link to="/books" className="btn btn-primary">
-                  Browse Books
-                </Link>
+                  ))}
+                </div>
               </div>
             )}
           </>
         )}
-
-        {/* Categories Section */}
-        <div className="quick-actions" style={{ marginTop: '3rem' }}>
-          <h2 className="section-title">📚 Book Categories</h2>
-          <div className="actions-grid">
-            <div className="action-card">
-              <span className="action-icon">⚡</span>
-              <h3 className="action-title">ECE Core</h3>
-              <p className="action-description">10+ subject categories</p>
-            </div>
-
-            <div className="action-card">
-              <span className="action-icon">🇯🇵</span>
-              <h3 className="action-title">JLPT</h3>
-              <p className="action-description">N5, N4, N3 levels</p>
-            </div>
-
-            <div className="action-card">
-              <span className="action-icon">💻</span>
-              <h3 className="action-title">Digital</h3>
-              <p className="action-description">E-books & resources</p>
-            </div>
-
-            <div className="action-card">
-              <span className="action-icon">📖</span>
-              <h3 className="action-title">Reference</h3>
-              <p className="action-description">Study materials</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

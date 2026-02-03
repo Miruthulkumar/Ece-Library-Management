@@ -14,8 +14,10 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import MyReservations from "./pages/MyReservations";
+import MyBooks from "./pages/MyBooks";
 import ManageBooks from "./pages/ManageBooks";
 import ManageUsers from "./pages/ManageUsers";
+import ManageReservations from "./pages/ManageReservations";
 import "./App.css";
 
 // Protected Route Component
@@ -91,14 +93,7 @@ function AppRoutes() {
             path="/my-books"
             element={
               <ProtectedRoute>
-                <div className="container" style={{ padding: "3rem" }}>
-                  <div className="card">
-                    <h2>My Books</h2>
-                    <p>
-                      View all your currently issued books and their due dates.
-                    </p>
-                  </div>
-                </div>
+                <MyBooks />
               </ProtectedRoute>
             }
           />
@@ -126,6 +121,15 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <ManageUsers />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-reservations"
+            element={
+              <ProtectedRoute>
+                <ManageReservations />
               </ProtectedRoute>
             }
           />

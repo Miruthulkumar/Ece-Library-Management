@@ -33,7 +33,7 @@ const MyReservations = () => {
 
     try {
       setCancellingId(reservationId);
-      await api.patch(`/reservations/${reservationId}/cancel`);
+      await api.delete(`/reservations/${reservationId}`);
       
       // Refresh the reservations list
       await fetchMyReservations();
@@ -102,10 +102,10 @@ const MyReservations = () => {
             {reservations.map((reservation) => (
               <div key={reservation._id} className="reservation-card">
                 <div className="reservation-image">
-                  {reservation.bookId?.coverImage ? (
+                  {reservation.book?.coverImage ? (
                     <img
-                      src={reservation.bookId.coverImage}
-                      alt={reservation.bookId.title}
+                      src={reservation.book.coverImage}
+                      alt={reservation.book.title}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "https://via.placeholder.com/150x200?text=No+Cover";
@@ -121,7 +121,7 @@ const MyReservations = () => {
                 <div className="reservation-content">
                   <div className="reservation-header">
                     <h3 className="reservation-title">
-                      {reservation.bookId?.title || "Unknown Title"}
+                      {reservation.book?.title || "Unknown Title"}
                     </h3>
                     <span className={getStatusBadgeClass(reservation.status)}>
                       {reservation.status}
@@ -132,14 +132,14 @@ const MyReservations = () => {
                     <div className="detail-item">
                       <span className="detail-label">Authors:</span>
                       <span className="detail-value">
-                        {reservation.bookId?.authors?.join(", ") || "Unknown"}
+                        {reservation.book?.authors?.join(", ") || "Unknown"}
                       </span>
                     </div>
 
                     <div className="detail-item">
                       <span className="detail-label">ISBN:</span>
                       <span className="detail-value">
-                        {reservation.bookId?.isbn || "N/A"}
+                        {reservation.book?.isbn || "N/A"}
                       </span>
                     </div>
 

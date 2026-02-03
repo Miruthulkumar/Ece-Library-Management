@@ -1,0 +1,468 @@
+/* ============================================
+   MANAGE RESERVATIONS - LIBRARIAN PAGE
+   ============================================ */
+
+.manage-reservations-page {
+  min-height: calc(100vh - 70px - 200px);
+  padding: 3rem 0;
+  animation: fadeIn 0.6s ease;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #dc2626;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+/* Stats Row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 2px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.pending {
+  border-color: #f59e0b;
+}
+
+.stat-card.available {
+  border-color: #10b981;
+}
+
+.stat-card.fulfilled {
+  border-color: #2563eb;
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  background: #fef2f2;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.stat-card.pending .stat-icon {
+  background: #fef3c7;
+}
+
+.stat-card.available .stat-icon {
+  background: #d1fae5;
+}
+
+.stat-card.fulfilled .stat-icon {
+  background: #dbeafe;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #dc2626;
+  line-height: 1;
+  margin-bottom: 0.375rem;
+}
+
+.stat-card.pending .stat-value {
+  color: #f59e0b;
+}
+
+.stat-card.available .stat-value {
+  color: #10b981;
+}
+
+.stat-card.fulfilled .stat-value {
+  color: #2563eb;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 0.75rem 1.5rem;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filter-tab:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+  transform: translateY(-2px);
+}
+
+.filter-tab.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* Alerts */
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 0.875rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.alert-icon {
+  font-size: 1.25rem;
+}
+
+/* Reservations Table */
+.reservations-table-container {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservations-table thead {
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.reservations-table th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reservations-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.reservations-table tbody tr:hover {
+  background: #fef2f2;
+}
+
+.reservations-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.reservations-table td {
+  padding: 1.25rem 1rem;
+  vertical-align: top;
+}
+
+/* Table Content */
+.queue-position {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: #dc2626;
+  color: #ffffff;
+  border-radius: 0.75rem;
+  font-weight: 800;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.user-info,
+.book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.user-name,
+.book-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.user-meta,
+.book-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.user-email,
+.book-isbn {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.date-info {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.025em;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.status-available {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-fulfilled {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-expired {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+}
+
+.btn {
+  padding: 0.625rem 1.125rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.btn-sm {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+}
+
+.btn-success {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-text {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.empty-state-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.4;
+}
+
+.empty-state-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .reservations-table-container {
+    overflow-x: auto;
+  }
+
+  .reservations-table {
+    min-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .manage-reservations-page {
+    padding: 2rem 0;
+  }
+
+  .page-header h1 {
+    font-size: 1.875rem;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.875rem;
+  }
+
+  .filter-tabs {
+    gap: 0.5rem;
+  }
+
+  .filter-tab {
+    padding: 0.625rem 1.125rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    min-width: 120px;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

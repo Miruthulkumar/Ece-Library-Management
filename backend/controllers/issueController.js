@@ -310,6 +310,54 @@ exports.returnBook = async (req, res) => {
   }
 };
 
+// @desc    Request book return
+// @route   PUT /api/issues/:id/request-return
+// @access  Private
+exports.requestReturn = async (req, res) => {
+  try {
+    const issue = await Issue.findById(req.params.id);
+
+    if (!issue) {
+      return res.status(404).json({
+        success: false,
+        message: "Issue record not found",
+      });
+    }
+
+    // Check if user owns this issue
+    if (issue.user.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to request return for this book",
+      });
+    }
+
+    if (issue.status !== "issued" && issue.status !== "overdue") {
+      return res.status(400).json({
+        success: false,
+        message: "This book is not currently issued or is already in return process",
+      });
+    }
+
+    issue.status = "return_requested";
+    issue.returnRequestedAt = new Date();
+    await issue.save();
+
+    await issue.populate("book", "title authors isbn");
+
+    res.status(200).json({
+      success: true,
+      message: "Return request submitted successfully. Please bring the book to the library.",
+      data: issue,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // @desc    Get overdue books
 // @route   GET /api/issues/overdue
 // @access  Private (Librarian)

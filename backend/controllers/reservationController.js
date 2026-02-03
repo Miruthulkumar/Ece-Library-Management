@@ -18,6 +18,14 @@ exports.createReservation = async (req, res) => {
       });
     }
 
+    // Check if book is available
+    if (book.availableCopies <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Book is currently unavailable for reservation",
+      });
+    }
+
     // Check if user already has a reservation for this book
     const existingReservation = await Reservation.findOne({
       user: userId,
@@ -45,7 +53,11 @@ exports.createReservation = async (req, res) => {
       queuePosition,
     });
 
-    await reservation.populate("book", "title authors isbn");
+    // Reduce available copies when reservation is created
+    book.availableCopies -= 1;
+    await book.save();
+
+    await reservation.populate("book", "title authors isbn category");
 
     res.status(201).json({
       success: true,
@@ -152,6 +164,13 @@ exports.cancelReservation = async (req, res) => {
     reservation.status = "cancelled";
     await reservation.save();
 
+    // Restore available copies when reservation is cancelled
+    const book = await Book.findById(bookId);
+    if (book) {
+      book.availableCopies += 1;
+      await book.save();
+    }
+
     // Update queue positions for remaining reservations
     await Reservation.updateMany(
       {
@@ -176,12 +195,17 @@ exports.cancelReservation = async (req, res) => {
   }
 };
 
-// @desc    Mark reservation as fulfilled
-// @route   PUT /api/reservations/:id/fulfill
+// @desc    Approve reservation and create issue
+// @route   PUT /api/reservations/:id/approve
 // @access  Private (Librarian)
-exports.fulfillReservation = async (req, res) => {
+exports.approveReservation = async (req, res) => {
   try {
-    const reservation = await Reservation.findById(req.params.id);
+    const Issue = require("../models/Issue");
+    const User = require("../models/User");
+    
+    const reservation = await Reservation.findById(req.params.id)
+      .populate("user")
+      .populate("book");
 
     if (!reservation) {
       return res.status(404).json({
@@ -190,21 +214,50 @@ exports.fulfillReservation = async (req, res) => {
       });
     }
 
-    if (reservation.status !== "available") {
+    if (reservation.status !== "pending" && reservation.status !== "available") {
       return res.status(400).json({
         success: false,
-        message: "This reservation is not available for fulfillment",
+        message: "This reservation cannot be approved",
       });
     }
 
+    // Calculate due date based on user role
+    const user = reservation.user;
+    const issueDuration = user.getIssueDuration();
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + issueDuration);
+
+    // Create issue from reservation
+    const issue = await Issue.create({
+      user: reservation.user._id,
+      book: reservation.book._id,
+      dueDate,
+      status: "issued",
+      approvedBy: req.user.id,
+      approvedAt: new Date(),
+    });
+
+    // Update book
+    const book = reservation.book;
+    book.issueCount += 1;
+    await book.save();
+
+    // Update user's issued books
+    await User.findByIdAndUpdate(reservation.user._id, {
+      $push: { booksIssued: issue._id },
+    });
+
+    // Mark reservation as fulfilled
     reservation.status = "fulfilled";
     reservation.fulfilledAt = new Date();
     await reservation.save();
 
+    await issue.populate(["book", "user"]);
+
     res.status(200).json({
       success: true,
-      message: "Reservation fulfilled successfully",
-      data: reservation,
+      message: "Reservation approved and book issued successfully",
+      data: { reservation, issue },
     });
   } catch (error) {
     res.status(500).json({
