@@ -9,7 +9,7 @@
   margin-bottom: 1.5rem;
   font-weight: 500;
 }
-
+                                  
 .alert-error {
   background-color: #fee2e2;
   color: #991b1b;
@@ -49,6 +49,8 @@
   transform: translateY(-50%);
   font-size: 1.2rem;
   color: #6b7280;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .search-input {
@@ -58,6 +60,9 @@
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  line-height: 1.5;
+  position: relative;
+  z-index: 0;
 }
 
 .search-input:focus {
