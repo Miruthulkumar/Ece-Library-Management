@@ -9,6 +9,9 @@ const ManageUsers = () => {
   const [filter, setFilter] = useState("all"); // all, pending, active, inactive
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -52,6 +55,36 @@ const ManageUsers = () => {
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete user");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
+  const openResetPasswordModal = (user) => {
+    setSelectedUser(user);
+    setNewPassword("");
+    setShowResetPasswordModal(true);
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    
+    if (newPassword.length < 6) {
+      setError("Password must be at least 6 characters long");
+      setTimeout(() => setError(""), 3000);
+      return;
+    }
+
+    try {
+      await api.put(`/users/${selectedUser._id}/reset-password`, {
+        newPassword,
+      });
+      setSuccess(`Password reset successfully for ${selectedUser.name}!`);
+      setShowResetPasswordModal(false);
+      setSelectedUser(null);
+      setNewPassword("");
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to reset password");
       setTimeout(() => setError(""), 3000);
     }
   };
@@ -169,6 +202,13 @@ const ManageUsers = () => {
                     <td>
                       <div className="action-buttons">
                         <button
+                          className="btn-action btn-reset-password"
+                          onClick={() => openResetPasswordModal(user)}
+                          title="Reset Password"
+                        >
+                          🔐
+                        </button>
+                        <button
                           className={`btn-action ${
                             user.isActive ? "btn-deactivate" : "btn-activate"
                           }`}
@@ -204,6 +244,59 @@ const ManageUsers = () => {
             </div>
           )}
         </div>
+
+        {/* Reset Password Modal */}
+        {showResetPasswordModal && selectedUser && (
+          <div className="modal-overlay" onClick={() => setShowResetPasswordModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>🔐 Reset Password</h2>
+                <button
+                  className="modal-close"
+                  onClick={() => setShowResetPasswordModal(false)}
+                >
+                  ✕
+                </button>
+              </div>
+              <form onSubmit={handleResetPassword} className="reset-password-form">
+                <div className="user-info-box">
+                  <p><strong>User:</strong> {selectedUser.name}</p>
+                  <p><strong>Email:</strong> {selectedUser.email}</p>
+                  <p><strong>Role:</strong> {selectedUser.role}</p>
+                </div>
+
+                <div className="form-group">
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password (min. 6 characters)"
+                    required
+                    minLength="6"
+                    autoFocus
+                  />
+                  <small className="form-hint">
+                    ⚠️ This will reset the user's password without requiring their current password
+                  </small>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowResetPasswordModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Reset Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

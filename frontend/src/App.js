@@ -20,6 +20,7 @@ import ManageUsers from "./pages/ManageUsers";
 import ManageReservations from "./pages/ManageReservations";
 import ManageIssues from "./pages/ManageIssues";
 import Analytics from "./pages/Analytics";
+import ChangePassword from "./pages/ChangePassword";
 import "./App.css";
 
 // Protected Route Component
@@ -150,6 +151,15 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
               </ProtectedRoute>
             }
           />

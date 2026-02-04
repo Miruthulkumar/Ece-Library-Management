@@ -9,6 +9,8 @@ const {
   payFine,
   waiveFine,
   toggleUserStatus,
+  changePassword,
+  adminResetPassword,
 } = require("../controllers/userController");
 const { protect } = require("../middleware/auth");
 const {
@@ -17,6 +19,10 @@ const {
 } = require("../middleware/roleCheck");
 
 router.get("/", protect, authorize("librarian"), getAllUsers);
+
+// Password management routes
+router.put("/change-password", protect, changePassword);
+router.put("/:id/reset-password", protect, authorize("librarian"), adminResetPassword);
 
 router
   .route("/:id")
