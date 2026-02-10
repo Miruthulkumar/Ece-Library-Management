@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Navbar.css";
+import collegeLogo from "../../assets/college_logo.png";
 
 const Navbar = () => {
   const { user, logout, isStudent, isFaculty, isLibrarian } = useAuth();
@@ -45,11 +46,11 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <div className="navbar-logo-icon">📚</div>
-          <div className="navbar-logo-text">
-            <div className="navbar-logo-title">MKCE ECE Library</div>
-            <div className="navbar-logo-subtitle">Management System</div>
-          </div>
+          <img
+            src={collegeLogo}
+            alt="College Logo"
+            className="navbar-logo-img static"
+          />
         </Link>
 
         {user && (
